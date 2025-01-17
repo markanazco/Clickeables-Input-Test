@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickeables Input Test: Botones Grandes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #configSection, #testSection {
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        #buttonGrid {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .dynamic-button {
+            background-color: lightgray;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .dynamic-button.selected {
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clickeables Input Test: Botones Grandes</h1>
+    <div id="configSection">
+        <h2>Configuración</h2>
+        <label for="rows">Filas:</label>
+        <input type="number" id="rows" min="1" value="3">
+        <label for="columns">Columnas:</label>
+        <input type="number" id="columns" min="1" value="3">
+        <label for="bgColor">Color de fondo:</label>
+        <input type="color" id="bgColor" value="#ffffff">
+        <label for="btnColor">Color de botones:</label>
+        <input type="color" id="btnColor" value="#cccccc">
+        <button id="generateGrid">Generar</button>
+    </div>
+
+    <div id="testSection" style="display: none;">
+        <h2>Prueba</h2>
+        <button id="startTest">Iniciar</button>
+        <button id="endTest" disabled>Finalizar</button>
+        <div id="buttonGrid"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfsRt...",
+            authDomain: "touch-input-test.firebaseapp.com",
+            databaseURL: "https://touch-input-test-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "touch-input-test",
+            storageBucket: "touch-input-test.firebasestorage.app",
+            messagingSenderId: "999206060657",
+            appId: "1:999206060657:web:5af8cf061b05db6c0ad1d0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const rowsInput = document.getElementById("rows");
+        const columnsInput = document.getElementById("columns");
+        const bgColorInput = document.getElementById("bgColor");
+        const btnColorInput = document.getElementById("btnColor");
+        const generateGridBtn = document.getElementById("generateGrid");
+        const testSection = document.getElementById("testSection");
+        const buttonGrid = document.getElementById("buttonGrid");
+        const startTestBtn = document.getElementById("startTest");
+        const endTestBtn = document.getElementById("endTest");
+
+        let startTime = 0;
+        let clickCount = 0;
+        let changeCount = 0;
+        let lastClickTime = 0;
+        let inactiveTime = 0;
+
+        generateGridBtn.addEventListener("click", () => {
+            const rows = parseInt(rowsInput.value);
+            const columns = parseInt(columnsInput.value);
+            const bgColor = bgColorInput.value;
+            const btnColor = btnColorInput.value;
+
+            document.body.style.backgroundColor = bgColor;
+            buttonGrid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+
+            buttonGrid.innerHTML = ""; // Clear existing grid
+            for (let i = 0; i < rows * columns; i++) {
+                const button = document.createElement("div");
+                button.className = "dynamic-button";
+                button.style.backgroundColor = btnColor;
+                button.textContent = `Cama ${i + 1}`;
+                button.addEventListener("click", () => toggleSelection(button));
+                buttonGrid.appendChild(button);
+            }
+
+            testSection.style.display = "block";
+        });
+
+        function toggleSelection(button) {
+            const currentTime = Date.now();
+            if (lastClickTime > 0) {
+                inactiveTime += currentTime - lastClickTime;
+            }
+            lastClickTime = currentTime;
+
+            clickCount++;
+            if (button.classList.contains("selected")) {
+                button.classList.remove("selected");
+                changeCount++;
+            } else {
+                button.classList.add("selected");
+            }
+        }
+
+        startTestBtn.addEventListener("click", () => {
+            startTime = Date.now();
+            clickCount = 0;
+            changeCount = 0;
+            inactiveTime = 0;
+            lastClickTime = 0;
+            startTestBtn.disabled = true;
+            endTestBtn.disabled = false;
+        });
+
+        endTestBtn.addEventListener("click", () => {
+            const endTime = Date.now();
+            const timeSpent = endTime - startTime;
+
+            const data = {
+                tiempoTotal: timeSpent,
+                cantidadDeClics: clickCount,
+                numeroDeCambios: changeCount,
+                tiempoInactivo: inactiveTime,
+                timestamp: endTime,
+            };
+
+            const refPath = push(ref(db, "pruebas/botones"));
+            set(refPath, data)
+                .then(() => alert("Datos guardados en Firebase"))
+                .catch((error) => console.error("Error al guardar los datos:", error));
+
+            startTestBtn.disabled = false;
+            endTestBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>
