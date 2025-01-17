@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickeables Input Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #configSection, #testSection {
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        #buttonGrid {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .dynamic-button {
+            background-color: lightgray;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .dynamic-button.selected {
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clickeables Input Test: Botones Grandes</h1>
+    <div id="configSection">
+        <h2>Configuración</h2>
+        <label for="rows">Filas:</label>
+        <input type="number" id="rows" min="1" value="3">
+        <label for="columns">Columnas:</label>
+        <input type="number" id="columns" min="1" value="3">
+        <label for="bgColor">Color de fondo:</label>
+        <input type="color" id="bgColor" value="#ffffff">
+        <label for="btnColor">Color de botones:</label>
+        <input type="color" id="btnColor" value="#cccccc">
+        <button id="generateGrid">Generar</button>
+    </div>
+
+    <div id="testSection" style="display: none;">
+        <h2>Prueba</h2>
+        <button id="startTest">Iniciar</button>
+        <button id="endTest" disabled>Finalizar</button>
+        <div id="buttonGrid"></div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
