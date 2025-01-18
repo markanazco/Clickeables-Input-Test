@@ -17,41 +17,29 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// --- Función para mostrar secciones ---
+// Variables globales
+let userInfo = {};
+
+// Mostrar sección
 function showSection(section) {
     document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
     document.getElementById(section).style.display = 'block';
 }
 
-// --- Implementación de las pruebas ---
-document.getElementById("generateGrid").addEventListener("click", () => {
-    // Generar la cuadrícula de botones
+// Capturar datos de usuario
+document.getElementById('startTests').addEventListener('click', () => {
+    const age = document.getElementById('age').value;
+    const sex = document.getElementById('sex').value;
+
+    if (!age || !sex) {
+        alert("Por favor, complete todos los campos antes de continuar.");
+        return;
+    }
+
+    userInfo = { age, sex };
+    document.getElementById('userInfo').style.display = 'none';
+    document.getElementById('menu').style.display = 'block';
+    alert("Usuario registrado. Puede comenzar las pruebas.");
 });
 
-document.getElementById("startTest").addEventListener("click", () => {
-    // Iniciar la prueba de botones
-});
-
-document.getElementById("endTest").addEventListener("click", () => {
-    // Finalizar y guardar datos en Firebase para botones grandes
-});
-
-document.getElementById("startFarmacoTest").addEventListener("click", () => {
-    // Iniciar la prueba de fármacos
-});
-
-document.getElementById("endFarmacoTest").addEventListener("click", () => {
-    // Finalizar y guardar datos en Firebase para fármacos
-});
-
-document.getElementById("generateCasillaGrid").addEventListener("click", () => {
-    // Generar la cuadrícula de casillas
-});
-
-document.getElementById("startCasillaTest").addEventListener("click", () => {
-    // Iniciar la prueba de casillas
-});
-
-document.getElementById("endCasillaTest").addEventListener("click", () => {
-    // Finalizar y guardar datos en Firebase para casillas seleccionables
-});
+// Agregar lógica de pruebas (Botones, Fármacos, Casillas) aquí...
