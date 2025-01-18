@@ -1,4 +1,4 @@
-// Importar funciones necesarias de Firebase
+// Importar funciones de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
@@ -17,31 +17,41 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// --- Funciones Comunes ---
-let startTime = 0;
-let clickCount = 0;
-let changeCount = 0;
-let lastClickTime = 0;
-let inactiveTime = 0;
-
-// Mostrar secciones
+// --- Función para mostrar secciones ---
 function showSection(section) {
     document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
     document.getElementById(section).style.display = 'block';
 }
 
-// --- Botones Grandes ---
+// --- Implementación de las pruebas ---
 document.getElementById("generateGrid").addEventListener("click", () => {
-    // Implementación de la generación de botones
+    // Generar la cuadrícula de botones
 });
 
-// --- Fármacos y Vías ---
-const farmacos = ["Paracetamol", "Ibuprofeno", "Amoxicilina", "Metformina", "Omeprazol"];
+document.getElementById("startTest").addEventListener("click", () => {
+    // Iniciar la prueba de botones
+});
+
+document.getElementById("endTest").addEventListener("click", () => {
+    // Finalizar y guardar datos en Firebase para botones grandes
+});
+
 document.getElementById("startFarmacoTest").addEventListener("click", () => {
-    // Implementación de la prueba de Fármacos
+    // Iniciar la prueba de fármacos
 });
 
-// --- Casillas Seleccionables ---
+document.getElementById("endFarmacoTest").addEventListener("click", () => {
+    // Finalizar y guardar datos en Firebase para fármacos
+});
+
 document.getElementById("generateCasillaGrid").addEventListener("click", () => {
-    // Implementación de la generación de casillas
+    // Generar la cuadrícula de casillas
+});
+
+document.getElementById("startCasillaTest").addEventListener("click", () => {
+    // Iniciar la prueba de casillas
+});
+
+document.getElementById("endCasillaTest").addEventListener("click", () => {
+    // Finalizar y guardar datos en Firebase para casillas seleccionables
 });
